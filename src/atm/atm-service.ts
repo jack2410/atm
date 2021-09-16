@@ -1,19 +1,22 @@
 import { Injectable } from '@nestjs/common';
 
-import data from '../utils/data';
+import Data from './atm.data';
 import { ATMProducerService } from './atm.producer.service';
 import { JOB_TYPES } from '../utils/constants';
 
 @Injectable()
 export class AtmService {
-  constructor(private readonly atmProcedureService: ATMProducerService) {}
+  constructor(
+    private readonly atmProcedureService: ATMProducerService,
+    private readonly data: Data,
+  ) {}
 
   getAtms() {
-    return data.getAtms();
+    return this.data.getAtms();
   }
 
   getQueue() {
-    return data.getQueue();
+    return this.data.getQueue();
   }
 
   async addAtm() {

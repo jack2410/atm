@@ -5,6 +5,7 @@ import { AtmService } from './atm-service';
 import { AtmControllerController } from './atm-controller/atm-controller.controller';
 import { ATMProducerService } from './atm.producer.service';
 import { ATMConsumer } from './atm.consumer';
+import Data from './atm.data';
 
 import { QUEUE_NAME } from '../utils/constants';
 
@@ -20,7 +21,7 @@ import { QUEUE_NAME } from '../utils/constants';
       name: QUEUE_NAME,
     }),
   ],
-  providers: [AtmService, ATMProducerService, ATMConsumer],
+  providers: [AtmService, ATMProducerService, ATMConsumer, Data],
   controllers: [AtmControllerController],
 })
 export class AtmModule {}
