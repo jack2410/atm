@@ -4,13 +4,19 @@ import { AtmService } from '../atm-service';
 @Controller('atms')
 export class AtmControllerController {
   constructor(private readonly service: AtmService) {}
+
   @Get()
-  getAtm() {
-    return this.service.getAtm();
+  getAtms() {
+    return this.service.getAtms();
+  }
+
+  @Get('queue')
+  getQueue() {
+    return this.service.getQueue();
   }
 
   @Post()
-  addAtm() {
-    return this.service.addAtm();
+  async addAtm() {
+    return await this.service.addAtm();
   }
 }

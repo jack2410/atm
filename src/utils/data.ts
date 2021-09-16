@@ -65,6 +65,10 @@ class Data {
     return this.atms;
   }
 
+  getQueue() {
+    return this.queue;
+  }
+
   addAtm() {
     if (this.isLockATM) return;
 
