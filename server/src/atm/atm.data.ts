@@ -41,7 +41,7 @@ export default class Data {
   isLock: boolean;
   intervalNewPerson: number;
 
-  constructor(atmProducerService: ATMProducerService) {
+  constructor(private readonly atmProducerService: ATMProducerService) {
     this.atms = initATMs;
     this.queue = initQueue;
     this.removeATMIds = [];
@@ -51,8 +51,8 @@ export default class Data {
       MIN_INTERVAL_NEW_PERSON,
     );
 
-    this.addPersonInterval(atmProducerService);
-    this.processTransactionInterval(atmProducerService);
+    this.addPersonInterval();
+    this.processTransactionInterval();
   }
 
   lock() {
@@ -110,7 +110,8 @@ export default class Data {
     this.unlock();
   }
 
-  addPersonInterval(atmProducerService: ATMProducerService) {
+  addPersonInterval() {
+    const atmProducerService = this.atmProducerService;
     setInterval(() => {
       atmProducerService?.sendToQueue(JOB_TYPES.ADD_PERSON);
     }, this.intervalNewPerson);
@@ -171,7 +172,8 @@ export default class Data {
     this.unlock();
   }
 
-  processTransactionInterval = (atmProducerService: ATMProducerService) => {
+  processTransactionInterval = () => {
+    const atmProducerService = this.atmProducerService;
     setInterval(() => {
       atmProducerService?.sendToQueue(JOB_TYPES.PROCESS_TRANSACTIONS);
     }, TIME_FOR_A_TRANSACTION);
@@ -184,7 +186,7 @@ export default class Data {
     );
     const transactions = Array(numberOfTransactions)
       .fill(null)
-      .map((item) => ({
+      .map((_item) => ({
         id: nanoid(),
       }));
 
@@ -198,7 +200,7 @@ export default class Data {
 
 const initATMs = Array(INIT_NUMBER_OF_ATMS)
   .fill(null)
-  .map((item) => ({
+  .map((_item) => ({
     id: nanoid(),
     status: ATMStatus.Free,
     queue: [],

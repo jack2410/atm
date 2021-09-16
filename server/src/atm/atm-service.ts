@@ -7,7 +7,7 @@ import { JOB_TYPES } from '../utils/constants';
 @Injectable()
 export class AtmService {
   constructor(
-    private readonly atmProcedureService: ATMProducerService,
+    private readonly atmProducerService: ATMProducerService,
     private readonly data: Data,
   ) {}
 
@@ -20,10 +20,10 @@ export class AtmService {
   }
 
   async addAtm() {
-    await this.atmProcedureService.sendToQueue(JOB_TYPES.ADD_ATM);
+    await this.atmProducerService.sendToQueue(JOB_TYPES.ADD_ATM);
   }
 
   async removeAtm(id: string) {
-    await this.atmProcedureService.sendToQueue(JOB_TYPES.REMOVE_ATM, { id });
+    await this.atmProducerService.sendToQueue(JOB_TYPES.REMOVE_ATM, { id });
   }
 }
