@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { AtmService } from '../atm-service';
 
 @Controller('atm')
@@ -7,5 +7,10 @@ export class AtmControllerController {
   @Get()
   getAtm() {
     return this.service.getAtm();
+  }
+
+  @Post()
+  addAtm() {
+    return this.service.addAtm();
   }
 }
