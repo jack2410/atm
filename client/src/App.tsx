@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-function App() {
+import ATM from './components/ATM';
+import Queue from './components/Queue';
+
+import useAtm from './hooks/useAtm';
+
+const App = () => {
+  const { atms, queue } = useAtm();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="min-vh-100 d-flex flex-column align-items-center justify-content-center">
+      <div>
+        <div className="d-flex align-items-start flex-wrap mb-3">
+          {atms.map((atm) => (
+            <ATM key={atm.id} atm={atm} />
+          ))}
+        </div>
+
+        <div className="w-100">
+          <Queue queue={queue} />
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default App;
