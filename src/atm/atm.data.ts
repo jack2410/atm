@@ -4,6 +4,7 @@ import { nanoid } from 'nanoid';
 import { ATMProducerService } from './atm.producer.service';
 
 import {
+  INIT_NUMBER_OF_ATMS,
   MIN_PERSON_TRANSACTIONS,
   MAX_PERSON_TRANSACTIONS,
   MIN_INTERVAL_NEW_PERSON,
@@ -36,15 +37,15 @@ export type Person = {
 export default class Data {
   atms: ATM[];
   queue: Person[];
-  isLockATM: boolean;
-  isLockQueue: boolean;
+  removeATMIds: string[];
+  isLock: boolean;
   intervalNewPerson: number;
 
   constructor(atmProducerService: ATMProducerService) {
     this.atms = initATMs;
     this.queue = initQueue;
-    this.isLockATM = false;
-    this.isLockQueue = false;
+    this.removeATMIds = [];
+    this.isLock = false;
     this.intervalNewPerson = this.randomMaxMin(
       MAX_INTERVAL_NEW_PERSON,
       MIN_INTERVAL_NEW_PERSON,
@@ -54,24 +55,16 @@ export default class Data {
     this.processTransactionInterval(atmProducerService);
   }
 
-  lockATM() {
-    this.isLockATM = true;
+  lock() {
+    this.isLock = true;
   }
 
-  unlockATM() {
-    this.isLockATM = false;
-  }
-
-  lockQueue() {
-    this.isLockQueue = true;
-  }
-
-  unlockQueue() {
-    this.isLockQueue = false;
+  unlock() {
+    this.isLock = false;
   }
 
   getAtms() {
-    return this.atms;
+    return this.atms.filter(Boolean);
   }
 
   getQueue() {
@@ -79,9 +72,9 @@ export default class Data {
   }
 
   addAtm() {
-    if (this.isLockATM) return;
+    if (this.isLock) return;
 
-    this.lockATM();
+    this.lock();
 
     const atm: ATM = {
       id: nanoid(),
@@ -90,13 +83,23 @@ export default class Data {
     };
     this.atms.push(atm);
 
-    this.unlockATM();
+    this.unlock();
+  }
+
+  removeAtm(id: string) {
+    this.lock();
+
+    if (!this.removeATMIds.includes(id)) {
+      this.removeATMIds.push(id);
+    }
+
+    this.unlock();
   }
 
   addPersonToQueue() {
-    if (this.isLockQueue) return;
+    if (this.isLock) return;
 
-    this.lockQueue();
+    this.lock();
 
     const person: Person = {
       id: nanoid(),
@@ -104,7 +107,7 @@ export default class Data {
     };
     this.queue.push(person);
 
-    this.unlockQueue();
+    this.unlock();
   }
 
   addPersonInterval(atmProducerService: ATMProducerService) {
@@ -114,48 +117,58 @@ export default class Data {
   }
 
   processTransactions() {
-    if (this.isLockQueue || this.isLockATM) return;
-    this.lockATM();
-    this.lockQueue();
+    if (this.isLock) return;
+    this.lock();
 
-    this.atms = this.atms.map((atm) => {
-      let queue = [...atm.queue];
-      let status = atm.status;
+    try {
+      this.atms = this.atms.map((atm) => {
+        let queue = [...atm.queue];
+        let status = atm.status;
 
-      if (queue.length) {
-        // revove the first transaction in atm's queue
-        if (queue[0]?.transactions.length === 1) {
-          queue = queue.slice(1);
-        } else {
-          queue[0] = {
-            id: queue[0]?.id,
-            transactions: queue[0]?.transactions.slice(1),
-          };
+        if (queue.length) {
+          // revove the first transaction in atm's queue
+          if (queue[0]?.transactions.length === 1) {
+            queue = queue.slice(1);
+          } else {
+            queue[0] = {
+              id: queue[0]?.id,
+              transactions: queue[0]?.transactions.slice(1),
+            };
+          }
         }
-      }
 
-      // if atm's queue is empty, add a person from queue
-      // if queue is empty too, set status to Free
-      if (!queue.length) {
-        if (this.queue?.length) {
-          const nextPerson = this.queue[0];
-          queue = [nextPerson];
-          this.queue = this.queue.slice(1);
-          status = ATMStatus.Busy;
-        } else {
-          status = ATMStatus.Free;
+        // if atm's queue is empty, add a person from queue
+        // if queue is empty too, set status to Free
+        if (!queue.length) {
+          if (this.removeATMIds.includes(atm.id)) {
+            this.removeATMIds = this.removeATMIds.filter(
+              (item) => item !== atm.id,
+            );
+            return null;
+          }
+          if (this.queue?.length) {
+            const nextPerson = this.queue[0];
+            queue = [nextPerson];
+            this.queue = this.queue.slice(1);
+            status = ATMStatus.Busy;
+          } else {
+            status = ATMStatus.Free;
+          }
         }
-      }
 
-      return {
-        id: atm.id,
-        status,
-        queue,
-      };
-    });
+        return {
+          id: atm.id,
+          status,
+          queue,
+        };
+      });
 
-    this.unlockATM();
-    this.unlockQueue();
+      this.atms = this.atms.filter(Boolean);
+    } catch (err) {
+      console.error(err);
+    }
+
+    this.unlock();
   }
 
   processTransactionInterval = (atmProducerService: ATMProducerService) => {
@@ -169,9 +182,11 @@ export default class Data {
       MAX_PERSON_TRANSACTIONS,
       MIN_PERSON_TRANSACTIONS,
     );
-    const transactions = Array(numberOfTransactions).fill({
-      id: nanoid(),
-    });
+    const transactions = Array(numberOfTransactions)
+      .fill(null)
+      .map((item) => ({
+        id: nanoid(),
+      }));
 
     return transactions;
   }
@@ -181,10 +196,12 @@ export default class Data {
   }
 }
 
-const initATMs = Array(3).fill({
-  id: nanoid(),
-  status: ATMStatus.Free,
-  queue: [],
-});
+const initATMs = Array(INIT_NUMBER_OF_ATMS)
+  .fill(null)
+  .map((item) => ({
+    id: nanoid(),
+    status: ATMStatus.Free,
+    queue: [],
+  }));
 
 const initQueue = [];

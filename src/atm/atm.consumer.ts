@@ -11,11 +11,14 @@ export class ATMConsumer {
   constructor(private readonly data: Data) {}
 
   @Process()
-  readOperationJob(job: Job<{ type: string }>) {
-    const { type } = job.data;
+  readOperationJob(job: Job<{ type: string; id: string | undefined }>) {
+    const { type, id } = job.data;
     switch (type) {
       case JOB_TYPES.ADD_ATM:
         this.data.addAtm();
+        break;
+      case JOB_TYPES.REMOVE_ATM:
+        this.data.removeAtm(id as string);
         break;
       case JOB_TYPES.ADD_PERSON:
         this.data.addPersonToQueue();

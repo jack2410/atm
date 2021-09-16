@@ -22,4 +22,8 @@ export class AtmService {
   async addAtm() {
     await this.atmProcedureService.sendToQueue(JOB_TYPES.ADD_ATM);
   }
+
+  async removeAtm(id: string) {
+    await this.atmProcedureService.sendToQueue(JOB_TYPES.REMOVE_ATM, { id });
+  }
 }

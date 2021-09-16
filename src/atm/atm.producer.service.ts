@@ -8,7 +8,7 @@ import { QUEUE_NAME } from '../utils/constants';
 export class ATMProducerService {
   constructor(@InjectQueue(QUEUE_NAME) private queue: Queue) {}
 
-  async sendToQueue(type: string) {
-    await this.queue.add({ type });
+  async sendToQueue(type: string, data: object = {}) {
+    await this.queue.add({ type, ...data });
   }
 }
