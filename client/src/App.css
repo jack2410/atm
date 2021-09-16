@@ -1,9 +1,32 @@
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .atm-image {
-  width: 200px;
+  width: 100%;
+  max-width: 200px;
 }
 
 .man-image {
   width: 30px;
+}
+
+.cancel-image {
+  width: 20px;
+}
+
+.cancel-image:hover {
+  opacity: 0.9;
+}
+
+.wrapper {
+  width: 80vw;
+}
+
+.atms {
+  max-height: 80vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .queue {
