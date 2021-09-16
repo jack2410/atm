@@ -11,13 +11,16 @@ const Queue: FC<Props> = ({ queue }: Props) => {
   return (
     <>
       <span className="fw-bold">Queue</span>
-      <div className="d-flex queue">
+      <div className="queue">
         {!!queue.length ? (
           <>
             {queue.map((person) => (
-              <div className="d-flex flex-column queue-item">
+              <div
+                key={person.id}
+                className="d-flex flex-column p-2 m-2 queue-item"
+              >
                 <img className="man-image" src={manImage} alt="waiting-man" />
-                <span>{person.id}</span>
+                <span className="break-word">ID: {person.id}</span>
                 <span>Transactions: {person.transactions.length}</span>
               </div>
             ))}

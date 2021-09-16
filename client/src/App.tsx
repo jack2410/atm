@@ -1,3 +1,5 @@
+import { Row, Col } from 'reactstrap';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -11,17 +13,21 @@ const App = () => {
 
   return (
     <div className="min-vh-100 d-flex flex-column align-items-center justify-content-center">
-      <div>
-        <div className="d-flex align-items-start flex-wrap mb-3">
-          {atms.map((atm) => (
-            <ATM key={atm.id} atm={atm} />
-          ))}
-        </div>
+      <Row>
+        <Col md={8} className="d-flex align-items-start flex-wrap mb-3">
+          <Row>
+            {atms.map((atm) => (
+              <Col md={4} key={atm.id}>
+                <ATM atm={atm} />
+              </Col>
+            ))}
+          </Row>
+        </Col>
 
-        <div className="w-100">
+        <Col md={4}>
           <Queue queue={queue} />
-        </div>
-      </div>
+        </Col>
+      </Row>
     </div>
   );
 };

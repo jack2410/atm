@@ -10,7 +10,7 @@ interface Props {
 }
 
 const ATM: FC<Props> = ({ atm }: Props) => {
-  const { id, status, queue } = atm;
+  const { status, queue } = atm;
   const isBusy = status === ATMStatus.Busy;
 
   return (
@@ -28,7 +28,7 @@ const ATM: FC<Props> = ({ atm }: Props) => {
           {queue.map((person) => (
             <div key={person.id} className="d-flex align-items-start mb-2">
               <img className="man-image" src={manImage} alt="waiting-man" />
-              <div className="mx-2">
+              <div className="mx-2 overflow-hidden">
                 <span className="fw-bold">{person.id}</span>
                 <p>Pending transactions: {person.transactions.length}</p>
               </div>
