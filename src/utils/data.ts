@@ -1,9 +1,11 @@
 import { nanoid } from 'nanoid';
 
-const MIN_PERSON_TRANSACTIONS = 1;
-const MAX_PERSON_TRANSACTIONS = 3;
-const MIN_INTERVAL_NEW_PERSON = 2000;
-const MAX_INTERVAL_NEW_PERSON = 4000;
+import {
+  MIN_PERSON_TRANSACTIONS,
+  MAX_PERSON_TRANSACTIONS,
+  MIN_INTERVAL_NEW_PERSON,
+  MAX_INTERVAL_NEW_PERSON,
+} from './constants';
 
 enum ATMStatus {
   Busy = 'Busy',

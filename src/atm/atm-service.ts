@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import data from '../data';
+import data from '../utils/data';
 
 @Injectable()
 export class AtmService {

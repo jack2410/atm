@@ -1,7 +1,7 @@
 import { Controller, Get, Post } from '@nestjs/common';
 import { AtmService } from '../atm-service';
 
-@Controller('atm')
+@Controller('atms')
 export class AtmControllerController {
   constructor(private readonly service: AtmService) {}
   @Get()
