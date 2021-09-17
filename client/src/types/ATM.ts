@@ -5,8 +5,11 @@ export enum ATMStatus {
 
 export type ATM = {
   id: string;
+  remainingInProcessTnxCount: number;
   status: ATMStatus;
   queue: Person[];
+  name: string;
+  processedPersons: Person[];
 };
 
 export type Transaction = {
@@ -16,4 +19,5 @@ export type Transaction = {
 export type Person = {
   id: string;
   transactions: Transaction[];
+  name: string;
 };

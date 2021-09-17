@@ -32,6 +32,11 @@ const ATM: FC<Props> = ({ atm, removeAtm }: Props) => {
         >
           {atm.status}
         </p>
+        <h4
+          className={``}
+        >
+          {atm.name}
+        </h4>
       </CardBody>
       {!!queue?.length && (
         <CardFooter className="w-100 px-3 pt-3">
@@ -39,8 +44,8 @@ const ATM: FC<Props> = ({ atm, removeAtm }: Props) => {
             <div key={person.id} className="d-flex align-items-start mb-2">
               <img className="man-image" src={manImage} alt="waiting-man" />
               <div className="mx-2 overflow-hidden">
-                <span className="fw-bold">{person.id}</span>
-                <p>Pending transactions: {person.transactions.length}</p>
+                <span className="fw-bold">{person.name}</span>
+                <p>Pending transactions: {atm.remainingInProcessTnxCount}</p>
               </div>
             </div>
           ))}

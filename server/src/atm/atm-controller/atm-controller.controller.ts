@@ -16,12 +16,12 @@ export class AtmControllerController {
   }
 
   @Get('queue')
-  getQueue() {
-    return this.service.getQueue();
+  async getQueue() {
+    return await this.service.getQueue();
   }
 
   @Post()
   async addAtm() {
-    return await this.service.addAtm();
+    return this.service.addAtm();
   }
 }

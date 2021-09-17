@@ -37,6 +37,14 @@ const App = () => {
           <Queue queue={queue} />
         </Col>
       </Row>
+      <Row className="wrapper">
+        <h3>Processed client</h3>
+        <Col className='' md={12}>
+          {atms.map((atm) => (
+            <div className='mt-2'><b>{atm.name}: </b>{atm.processedPersons.map(e => e.name).join(', ')}</div>
+          ))}
+        </Col>
+      </Row>
     </div>
   );
 };

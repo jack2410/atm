@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 
-import { ATM, Person } from '../types/ATM';
+import { ATM, ATMStatus, Person } from '../types/ATM';
 import { INTERVAL_API_CALLING } from '../utils/constants';
 import { getAtms, addAtm, removeAtm, getQueue } from '../services/api';
 
@@ -19,7 +19,14 @@ const useAtm = () => {
   const getData = async () => {
     try {
       const [atmRes, queueRes] = await Promise.all([getAtms(), getQueue()]);
-      setAtms(atmRes.data);
+      setAtms((atmRes.data as any[]).map(e => ({
+        id: e.id,
+        status: e.person ? ATMStatus.Busy : ATMStatus.Free,
+        queue: e.person ? [e.person] : [],
+        remainingInProcessTnxCount: e.remainingInProcessTnxCount,
+        processedPersons: e.processedPersons,
+        name: e.name
+      })))
       setQueue(queueRes.data);
     } catch (err) {
       console.error(err);

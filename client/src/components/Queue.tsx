@@ -20,7 +20,7 @@ const Queue: FC<Props> = ({ queue }: Props) => {
                 className="d-flex flex-column p-2 m-2 queue-item"
               >
                 <img className="man-image" src={manImage} alt="waiting-man" />
-                <span className="break-word">ID: {person.id}</span>
+                <span className="break-word">Name: {person.name}</span>
                 <span>Transactions: {person.transactions.length}</span>
               </div>
             ))}
