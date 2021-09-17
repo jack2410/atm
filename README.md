@@ -13,7 +13,7 @@
 
 - Backend: NestJS framework, using @nestjs/bull for queue and Node.js multiple-threading for process transactions (each ATM stands for a thread).
 - Frontend: React.js, using hooks and an interval for retriving new data (browser will call server every second to get new data).
-- Deployment: Docker, using docker-compose with 3 services (redis, server, client).
+- Deployment: Docker, using docker-compose with 2 services (server, client).
 
 ### Setup
 
@@ -21,7 +21,6 @@
 
 ##### Run in local
 
-- Run redis server (recommend using docker): `docker run --name redis-server -p 6379:6379 -d redis`.
 - cd to server folder and run `npm i` to install packages for nestjs app
 - cd to client folder and run `npm i` to install packages for react app.
 - cd to server folder and run `npm start` to start the backend.
